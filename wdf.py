@@ -183,9 +183,10 @@ def webwxinit():
     params = {
         'BaseRequest': BaseRequest
     }
-
-    request = (url, json.dumps(params).encode(encoding='UTF8'))
-    request.add_header('ContentType', 'application/json; charset=UTF-8')
+    header = {
+        'ContentType': 'application/json; charset=UTF-8'
+    }
+    request = urllib.request.Request(url, json.dumps(params).encode(encoding='UTF8'), header)
     response = urllib.request.urlopen(request)
     data = response.read().decode("UTF8")
 
@@ -263,9 +264,10 @@ def createChatroom(UserNames):
         'MemberList': MemberList,
         'Topic': '',
     }
-
-    request = urllib.request.Request(url, json.dumps(params).encode(encoding='UTF8'))
-    request.add_header('ContentType', 'application/json; charset=UTF-8')
+    header = {
+        'ContentType': 'application/json; charset=UTF-8'
+    }
+    request = urllib.request.Request(url, json.dumps(params).encode(encoding='UTF8'), header)
     response = urllib.request.urlopen(request)
     data = response.read().decode("UTF8")
 
@@ -293,9 +295,10 @@ def deleteMember(ChatRoomName, UserNames):
         'ChatRoomName': ChatRoomName,
         'DelMemberList': ','.join(UserNames),
     }
-
-    request = urllib.request.Request(url, json.dumps(params).encode(encoding='UTF8'))
-    request.add_header('ContentType', 'application/json; charset=UTF-8')
+    header = {
+        'ContentType': 'application/json; charset=UTF-8'
+    }
+    request = urllib.request.Request(url, json.dumps(params).encode(encoding='UTF8'), header)
     response = urllib.request.urlopen(request)
     data = response.read().decode("UTF8")
 
@@ -320,9 +323,10 @@ def addMember(ChatRoomName, UserNames):
         'ChatRoomName': ChatRoomName,
         'AddMemberList': ','.join(UserNames),
     }
-
-    request = urllib.request.Request(url, json.dumps(params).encode(encoding='UTF8'))
-    request.add_header('ContentType', 'application/json; charset=UTF-8')
+    header = {
+        'ContentType': 'application/json; charset=UTF-8'
+    }
+    request = urllib.request.Request(url, json.dumps(params).encode(encoding='UTF8'), header)
     response = urllib.request.urlopen(request)
     data = response.read().decode("UTF8")
 
@@ -386,7 +390,7 @@ def main():
             NickNames.append(Member['NickName'].encode('utf-8'))
 
         print('第%s组...' % (i + 1))
-        print(', '.join(NickNames))
+        print(', '.join(tmp.decode('utf-8') for tmp in NickNames))
         print('回车键继续...')
         input()
 
@@ -434,7 +438,7 @@ class UnicodeStreamFilter:
     def write(self, s):
         # if type(s) == str:
         #     s = s.decode('utf-8')
-        # s = s.encode(self.encode_to, self.errors).decode(self.encode_to)
+        s = s.encode(self.encode_to, self.errors).decode(self.encode_to)
         self.target.write(s)
 
 
